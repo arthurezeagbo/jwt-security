@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -35,6 +36,9 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @GetMapping(value = "/getAll")
     public List<User> getUsersList(){
         return userRepository.findAll();
@@ -50,9 +54,10 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(),
-                    authenticationRequest.getPassword()
+                    passwordEncoder.encode(authenticationRequest.getPassword())
             ));
         }catch (BadCredentialsException exception){
+            System.out.println(exception.getMessage());
             throw new Exception("Incorrect username or password");
         }
 

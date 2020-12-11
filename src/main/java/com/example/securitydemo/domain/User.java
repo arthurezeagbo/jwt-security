@@ -16,14 +16,23 @@ public class User {
     private String password;
     @Column(nullable = false,unique = true)
     private String email;
+    public String[] authorities;
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email,String... authorities) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.authorities = authorities;
     }
 
     public User() {
+    }
+
+    public void setAuthorities(String... authority){
+        this.authorities = authority;
+    }
+    public String[] getAuthorities(){
+        return authorities;
     }
 
     public long getUserId() {
